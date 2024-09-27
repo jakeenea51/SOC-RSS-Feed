@@ -41,7 +41,7 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
                 feeds["Source"].append(feedTitle)
                 feeds["Title"].append(feed.entries[i].title)
                 feeds["Description"].append((str(feed.entries[i].description).encode("utf-8"))[:150])
-                feeds["Link"].append('=HYPERLINK("' + str(feed.entries[i].link) + '", "' + str(feed.entries[i].link) + '")')
+                feeds["Link"].append(feed.entries[i].link)
             i = i + 1
 
     df = pandas.DataFrame(data=feeds)
