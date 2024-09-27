@@ -7,6 +7,11 @@ import time
 import os
 from azure.storage.blob import BlobServiceClient
 from io import StringIO
+import smtplib
+from email.mime.text import MIMEText
+from email import encoders
+from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
 
 
 app = func.FunctionApp()
@@ -58,5 +63,29 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
 
     # Upload the file
     blob_client.upload_blob(csv_buffer.getvalue(), overwrite=True)
+
+    # send email
+    subject = "Daily SOC RSS Feed"
+    body = "Attached is your daily SOC RSS Feed."
+    recipient_email = ["jakemenea@gmail.com"]
+    sender_email = os.getenv("SENDER")
+    sender_password = os.getenv("APP_PASSWORD")
+
+    file_part = MIMEBase("application", "octet-stream")
+    file_part.set_payload(csv_buffer.read())
+    encoders.encode_base64(file_part)
+    file_part.add_header("Content-Disposition", "attachment; filename = feed.csv")
+
+    msg = MIMEMultipart()
+    msg['From'] = sender_email
+    msg['To'] = ', '.join(recipient_email)
+    msg['Subject'] = subject
+    body_part = MIMEText(body)
+    msg.attach(file_part)
+    msg.attach(body_part)
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
+        smtp_server.login(sender_email, sender_password)
+        smtp_server.sendmail(sender_email, recipient_email, msg.as_string())
 
     logging.info('Python timer trigger function executed.')
