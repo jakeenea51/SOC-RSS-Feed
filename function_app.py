@@ -72,7 +72,7 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
     sender_password = os.getenv("APP_PASSWORD")
 
     file_part = MIMEBase("application", "octet-stream")
-    file_part.set_payload(csv_buffer.read())
+    file_part.set_payload(csv_buffer.getvalue())
     encoders.encode_base64(file_part)
     file_part.add_header("Content-Disposition", "attachment; filename = feed.csv")
 
