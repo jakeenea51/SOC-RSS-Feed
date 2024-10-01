@@ -15,6 +15,12 @@ import csv
 
 app = func.FunctionApp()
 
+timezones = {
+    "PDT": "-0700",
+    "PST": "-0800",
+    "GMT": "+0000",
+    }
+
 @app.schedule(schedule="0 0 12 * * *", arg_name="myTimer", run_on_startup=True, use_monitor=False) 
 def timer_trigger(myTimer: func.TimerRequest) -> None:
     if myTimer.past_due:
@@ -32,12 +38,14 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
         xml_data = response.read()
         feed = ET.fromstring(xml_data).find('channel')
         feedTitle = feed.find('title').text
-        i = 0
         for item in feed.findall('item'):
             t1 = datetime.now().astimezone(timezone.utc)
-            t2 = datetime.strptime(item.find('pubDate').text, "%a, %d %b %Y %H:%M:%S %z").astimezone(timezone.utc)
+            if (item.find('pubDate').text[-1:]).isalpha():
+                t2 = item.find('pubDate').text[:-3] + timezones[item.find('pubDate').text[-3:]]
+                t2 = datetime.strptime(t2, "%a, %d %b %Y %H:%M:%S %z").astimezone(timezone.utc)
+            else:
+                t2 = datetime.strptime(item.find('pubDate').text, "%a, %d %b %Y %H:%M:%S %z").astimezone(timezone.utc)
             if ((t1 - t2).days) < 1:
-                print((str(item.find('description').text).encode("utf-8"))[:150])
                 feeds["Source"].append(feedTitle)
                 feeds["Date"].append(item.find('pubDate').text)
                 feeds["Title"].append(item.find('title').text)
