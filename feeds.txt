@@ -2,3 +2,4 @@ https://techcommunity.microsoft.com/plugins/custom/microsoft/o365/custom-blog-rs
 https://techcommunity.microsoft.com/plugins/custom/microsoft/o365/custom-blog-rss?tid=-1974697410160520501&board=MicrosoftDefenderCloudBlog&size=25
 https://techcommunity.microsoft.com/plugins/custom/microsoft/o365/custom-blog-rss?tid=-1974697410160520501&board=MicrosoftThreatProtectionBlog&size=25
 https://feeds.feedburner.com/TheHackersNews
+https://www.wiz.io/feed/rss.xml
