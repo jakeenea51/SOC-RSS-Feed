@@ -31,14 +31,25 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
         for line in f:
             urls.append(line)
 
-
+    # loop through all feeds
     feeds = {"Source": [], "Date": [], "Title": [], "Description": [], "Link": []}
     for url in urls:
+        
+        # set user agent to Mozilla to avoid getting blocked by some sites 
+        opener = urllib.request.build_opener()
+        opener.addheaders = [('User-Agent', 'Mozilla/5.0')]
+        urllib.request.install_opener(opener)
+
+        # read xml data
         response = urllib.request.urlopen(url)
         xml_data = response.read()
         feed = ET.fromstring(xml_data).find('channel')
         feedTitle = feed.find('title').text
+
+        # loop through all items in the feed
         for item in feed.findall('item'):
+
+            # convert and compare timestamps
             t1 = datetime.now().astimezone(timezone.utc)
             if (item.find('pubDate').text[-1:]).isalpha():
                 t2 = item.find('pubDate').text[:-3] + timezones[item.find('pubDate').text[-3:]]
