@@ -4,3 +4,4 @@ https://techcommunity.microsoft.com/plugins/custom/microsoft/o365/custom-blog-rs
 https://feeds.feedburner.com/TheHackersNews
 https://www.wiz.io/feed/rss.xml
 https://www.netspi.com/feed/
+https://www.microsoft.com/en-us/security/blog/feed/
