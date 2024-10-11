@@ -21,7 +21,7 @@ timezones = {
     "GMT": "+0000",
     }
 
-@app.schedule(schedule="0 0 12 * * *", arg_name="myTimer", run_on_startup=False, use_monitor=False) 
+@app.schedule(schedule="0 0 12 * * 1", arg_name="myTimer", run_on_startup=False, use_monitor=False) 
 def timer_trigger(myTimer: func.TimerRequest) -> None:
     if myTimer.past_due:
         logging.info('The timer is past due!')
@@ -35,14 +35,15 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
     feeds = {"Source": [], "Date": [], "Title": [], "Description": [], "Link": []}
     for url in urls:
         
-        # set user agent to Mozilla to avoid getting blocked by some sites 
-        opener = urllib.request.build_opener()
-        opener.addheaders = [('User-Agent', 'Mozilla/5.0')]
-        urllib.request.install_opener(opener)
+        # set user agent to Mozilla to avoid getting blocked by some sites - two methods
+        try:
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (platform; rv:17.0) Gecko/20100101 Firefox/17.0'})
+            xml_data = urllib.request.urlopen(req).read()
+        except urllib.error.HTTPError:
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            xml_data = urllib.request.urlopen(req).read()
 
         # read xml data
-        response = urllib.request.urlopen(url)
-        xml_data = response.read()
         feed = ET.fromstring(xml_data).find('channel')
         feedTitle = feed.find('title').text
 
