@@ -72,8 +72,8 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
     writer.writerows(zip(*feeds.values()))
 
     # send email
-    subject = "Daily SOC RSS Feed"
-    body = "Attached is your daily SOC RSS Feed."
+    subject = "Weekly SOC RSS Feed"
+    body = "Attached is your weekly SOC RSS Feed."
     recipient_email = os.getenv("RECIPIENTS").split(" ")
     sender_email = os.getenv("SENDER")
     sender_password = os.getenv("APP_PASSWORD")
