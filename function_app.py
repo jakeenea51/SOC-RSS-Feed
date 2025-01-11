@@ -52,17 +52,24 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
 
             # convert and compare timestamps
             t1 = datetime.now().astimezone(timezone.utc)
-            if (item.find('pubDate').text[-1:]).isalpha():
+            # ISO 8601 -> datetime
+            if item.find('pubDate').text[-1:] == "Z": 
+                t2 = item.find('pubDate').text
+                t2 = datetime.strptime(t2, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+            # RFC 1123 -> datetime
+            elif item.find('pubDate').text[-1:].isalpha(): 
                 t2 = item.find('pubDate').text[:-3] + timezones[item.find('pubDate').text[-3:]]
                 t2 = datetime.strptime(t2, "%a, %d %b %Y %H:%M:%S %z").astimezone(timezone.utc)
+            # RFC 2822 -> datetime
             else:
                 t2 = datetime.strptime(item.find('pubDate').text, "%a, %d %b %Y %H:%M:%S %z").astimezone(timezone.utc)
-            if ((t1 - t2).days) <= 7:
+            print(t2)
+            if ((t1 - t2).days) <= 30:
                 feeds["Source"].append(feedTitle)
                 feeds["Date"].append(item.find('pubDate').text)
                 feeds["Title"].append(item.find('title').text)
                 feeds["Description"].append((str(item.find('description').text).encode("utf-8"))[:150])
-                feeds["Link"].append(item.find('link').text)
+                feeds["Link"].append(item.find('link').text.lstrip('\n').lstrip(" ")) # clean up link field - messy on some RSS feeds
 
     # write csv data to buffer
     csv_buffer = StringIO()
