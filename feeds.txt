@@ -6,3 +6,4 @@ https://www.wiz.io/feed/rss.xml
 https://www.netspi.com/feed/
 https://www.microsoft.com/en-us/security/blog/feed/
 https://securitylabs.datadoghq.com/rss/feed.xml
+https://redcanary.com/feed/
