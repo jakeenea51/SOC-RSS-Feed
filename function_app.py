@@ -64,7 +64,7 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
             else:
                 t2 = datetime.strptime(item.find('pubDate').text, "%a, %d %b %Y %H:%M:%S %z").astimezone(timezone.utc)
             print(t2)
-            if ((t1 - t2).days) <= 30:
+            if ((t1 - t2).days) <= 7:
                 feeds["Source"].append(feedTitle)
                 feeds["Date"].append(item.find('pubDate').text)
                 feeds["Title"].append(item.find('title').text)
