@@ -8,3 +8,4 @@ https://www.microsoft.com/en-us/security/blog/feed/
 https://securitylabs.datadoghq.com/rss/feed.xml
 https://redcanary.com/feed/
 https://permiso.io/blog/rss.xml
+https://www.huntress.com/blog/rss.xml
