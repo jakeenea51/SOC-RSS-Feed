@@ -13,6 +13,10 @@ import xml.etree.ElementTree as ET
 import csv
 
 
+# TODO:
+# -add link to inactive feeds' blogs 
+
+
 app = func.FunctionApp()
 
 timezones = {
@@ -53,17 +57,18 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
             # convert and compare timestamps
             t1 = datetime.now().astimezone(timezone.utc)
             # ISO 8601 -> datetime
-            if item.find('pubDate').text[-1:] == "Z": 
-                t2 = item.find('pubDate').text
-                t2 = datetime.strptime(t2, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
-            # RFC 1123 -> datetime
-            elif item.find('pubDate').text[-1:].isalpha(): 
-                t2 = item.find('pubDate').text[:-3] + timezones[item.find('pubDate').text[-3:]]
-                t2 = datetime.strptime(t2, "%a, %d %b %Y %H:%M:%S %z").astimezone(timezone.utc)
-            # RFC 2822 -> datetime
-            else:
-                t2 = datetime.strptime(item.find('pubDate').text, "%a, %d %b %Y %H:%M:%S %z").astimezone(timezone.utc)
-            print(t2)
+            try:
+                if item.find('pubDate').text[-1:] == "Z": 
+                    t2 = datetime.strptime(item.find('pubDate').text, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+                # RFC 1123 -> datetime
+                elif item.find('pubDate').text[-1:].isalpha(): 
+                    t2 = item.find('pubDate').text[:-3] + timezones[item.find('pubDate').text[-3:]]
+                    t2 = datetime.strptime(t2, "%a, %d %b %Y %H:%M:%S %z").astimezone(timezone.utc)
+                # RFC 2822 -> datetime
+                else:
+                    t2 = datetime.strptime(item.find('pubDate').text, "%a, %d %b %Y %H:%M:%S %z").astimezone(timezone.utc)
+            except ValueError:
+                t2 = datetime.strptime(item.find('pubDate').text, "%a, %d %b %y %H:%M:%S %z").astimezone(timezone.utc)
             if ((t1 - t2).days) <= 7:
                 feeds["Source"].append(feedTitle)
                 feeds["Date"].append(item.find('pubDate').text)
