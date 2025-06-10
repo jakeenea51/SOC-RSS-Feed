@@ -1,12 +1,13 @@
-https://techcommunity.microsoft.com/t5/s/plugins/custom/microsoft/o365/custom-blog-rss?tid=-7695784012209653256&board=MicrosoftSentinelBlog&size=25
-https://techcommunity.microsoft.com/t5/s/plugins/custom/microsoft/o365/custom-blog-rss?tid=-1974697410160520501&board=MicrosoftDefenderCloudBlog&size=25
-https://techcommunity.microsoft.com/t5/s/plugins/custom/microsoft/o365/custom-blog-rss?tid=-1974697410160520501&board=MicrosoftThreatProtectionBlog&size=25
-https://feeds.feedburner.com/TheHackersNews
-https://www.wiz.io/feed/rss.xml
-https://www.netspi.com/feed/
-https://www.microsoft.com/en-us/security/blog/feed/
-https://securitylabs.datadoghq.com/rss/feed.xml
-https://redcanary.com/feed/
-https://permiso.io/blog/rss.xml
-https://www.cisa.gov/news.xml
-https://www.cisa.gov/blog.xml
+https://techcommunity.microsoft.com/t5/s/plugins/custom/microsoft/o365/custom-blog-rss?tid=-7695784012209653256&board=MicrosoftSentinelBlog&size=25,Microsoft Sentinel Blog
+https://techcommunity.microsoft.com/t5/s/plugins/custom/microsoft/o365/custom-blog-rss?tid=-1974697410160520501&board=MicrosoftDefenderCloudBlog&size=25,Microsoft Defender for Cloud Blog
+https://techcommunity.microsoft.com/t5/s/plugins/custom/microsoft/o365/custom-blog-rss?tid=-1974697410160520501&board=MicrosoftThreatProtectionBlog&size=25,Microsoft Threat Protection Blog
+https://feeds.feedburner.com/TheHackersNews,The Hacker News
+https://www.wiz.io/feed/rss.xml,Wiz
+https://www.netspi.com/feed/,NetSPI
+https://www.microsoft.com/en-us/security/blog/feed/,Microsoft Security Blog
+https://securitylabs.datadoghq.com/rss/feed.xml,Datadog
+https://redcanary.com/feed/,Red Canary
+https://permiso.io/blog/rss.xml,Permiso
+https://www.cisa.gov/news.xml,CISA News
+https://www.cisa.gov/blog.xml,CISA Blog
+https://www.crowdstrike.com/en-us/blog/feed,CrowdStrike

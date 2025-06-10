@@ -30,15 +30,17 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
     if myTimer.past_due:
         logging.info('The timer is past due!')
 
-    urls = []
+    inputFeeds = []
     with open("feeds.txt", "r") as f:
         for line in f:
-            urls.append(line)
+            inputFeeds.append(line)
 
     # loop through all feeds
     feeds = {"Source": [], "Date": [], "Title": [], "Description": [], "Link": []}
-    for url in urls:
+    for inputFeed in inputFeeds:
         
+        url, feedTitle = inputFeed.split(",")[0], inputFeed.split(",")[1]
+
         # set user agent to Mozilla to avoid getting blocked by some sites - two methods
         try:
             req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (platform; rv:17.0) Gecko/20100101 Firefox/17.0'})
@@ -49,7 +51,6 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
 
         # read xml data
         feed = ET.fromstring(xml_data).find('channel')
-        feedTitle = feed.find('title').text
 
         # loop through all items in the feed
         for item in feed.findall('item'):
@@ -68,12 +69,19 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
                 else:
                     t2 = datetime.strptime(item.find('pubDate').text, "%a, %d %b %Y %H:%M:%S %z").astimezone(timezone.utc)
             except ValueError:
-                t2 = datetime.strptime(item.find('pubDate').text, "%a, %d %b %y %H:%M:%S %z").astimezone(timezone.utc)
+                try:
+                    t2 = datetime.strptime(item.find('pubDate').text, "%a, %d %b %y %H:%M:%S %z").astimezone(timezone.utc)
+                except ValueError:
+                    # format: Jun 05, 2025 00:00:00-0500
+                    t2 = datetime.strptime(item.find('pubDate').text, "%b %d, %Y %H:%M:%S%z").astimezone(timezone.utc)
             if ((t1 - t2).days) <= 7:
                 feeds["Source"].append(feedTitle)
                 feeds["Date"].append(item.find('pubDate').text)
                 feeds["Title"].append(item.find('title').text)
-                feeds["Description"].append((str(item.find('description').text).encode("utf-8"))[:150])
+                if item.find('description') is not None:
+                    feeds["Description"].append((str(item.find('description').text).encode("utf-8"))[:150])
+                else:
+                    feeds["Description"].append("N/A")
                 feeds["Link"].append(item.find('link').text.lstrip('\n').lstrip(" ")) # clean up link field - messy on some RSS feeds
 
     # write csv data to buffer
