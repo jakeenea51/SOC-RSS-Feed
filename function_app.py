@@ -75,14 +75,14 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
                     # format: Jun 05, 2025 00:00:00-0500
                     t2 = datetime.strptime(item.find('pubDate').text, "%b %d, %Y %H:%M:%S%z").astimezone(timezone.utc)
             if ((t1 - t2).days) <= 7:
-                feeds["Source"].append(feedTitle)
+                feeds["Source"].append(feedTitle.lstrip('\n').lstrip(" "))
                 feeds["Date"].append(item.find('pubDate').text)
                 feeds["Title"].append(item.find('title').text)
+                feeds["Link"].append(item.find('link').text.lstrip('\n').lstrip(" ")) # clean up link field - messy on some RSS feeds
                 if item.find('description') is not None:
                     feeds["Description"].append((str(item.find('description').text).encode("utf-8"))[:150])
                 else:
                     feeds["Description"].append("N/A")
-                feeds["Link"].append(item.find('link').text.lstrip('\n').lstrip(" ")) # clean up link field - messy on some RSS feeds
 
     # write csv data to buffer
     csv_buffer = StringIO()
